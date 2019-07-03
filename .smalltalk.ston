@@ -1,4 +1,5 @@
 SmalltalkCISpec {
+  #preLoading : 'download-unicode-table.st',
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'OSSubprocess',
