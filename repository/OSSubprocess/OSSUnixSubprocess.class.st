@@ -1082,10 +1082,12 @@ OSSUnixSubprocess >> waitForExit [
 	Therefore, use this method (and all its senders) only when using FileStreams for the standard streams, 
 	when not defining standard streams at all, or when you know the command to be executed does not write much in stdout/stderr."
 
-	exitStatus ifNotNil: [ ^ exitStatus ].
+	self debugLog: 'waitForExit-enter pid=', self pid printString.
+	exitStatus ifNotNil: [ self debugLog: 'waitForExit-already-exited pid=', self pid printString. ^ exitStatus ].
 
 	mutexForSigchld := Semaphore new.
 	mutexForSigchld wait. 
+	self debugLog: 'waitForExit-return pid=', self pid printString.
 	^ exitStatus  
 ]
 
@@ -1115,6 +1117,7 @@ OSSUnixSubprocess >> waitForExitPollingEvery: aDelay doing: aClosure [
 	
 	"
 	shouldContinueWaiting := true.
+	self debugLog: 'waitForExitPolling-enter pid=', self pid printString.
 	[
 		"If the #shutDown: (shouldContinueWaiting was set to false) happened while this process was in the #wait 
 		 then we simply check 'shouldContinueWaiting' here before doing the #queryExitStatus"
